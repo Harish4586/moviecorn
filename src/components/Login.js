@@ -1,111 +1,131 @@
 import React, { useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidData } from "../utils/validate";
+import { createUserWithEmailAndPassword , signInWithEmailAndPassword,updateProfile } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { photoURL } from "../utils/constants";
 
 const Login = () => {
   const [isSignInForm, setisSignInForm] = useState(true);
-  const [errorMessage,seterrorMessage]=useState(null);
-  
-  const email= useRef(null);
-  const password= useRef(null);
-  const fullName= useRef(null);
+  const [errorMessage, seterrorMessage] = useState(null);
 
-  const toggleSignInForm = () => {
-    setisSignInForm(!isSignInForm);
-  };
+  const email = useRef(null);
+  const password = useRef(null);
+  const fullName = useRef(null);
+  const navigate= useNavigate();
+
+  const toggleSignInForm = () => setisSignInForm(!isSignInForm);
+
   const handleButtonClick = (event) => {
-    event.preventDefault(); // Prevents the form from submitting and reloading the page
-    const emailValue = email.current.value;
-    const passwordValue = password.current.value;
-    const fullNamevalue= fullName.current.value;
-    console.log(emailValue,passwordValue,fullNamevalue);
-  
-    // If needed, pass the values to your validation function
-    const retmsg = checkValidData(emailValue, passwordValue,fullNamevalue);
-    seterrorMessage(retmsg);
+    event.preventDefault();
+
+    // Safely access ref values
+    const emailValue = email.current?.value;
+    const passwordValue = password.current?.value;
+    const fullNameValue = !isSignInForm && fullName.current?.value;
+    const retmsg = checkValidData(emailValue, passwordValue, fullNameValue);
+    seterrorMessage(retmsg)
+    if(retmsg!==null) return;
+    //signin signup logic
+    if(!isSignInForm){
+      //sign up logic
+
+    createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value)
+        .then((userCredential) => {
+        // Signed up 
+        const user = userCredential.user;
+        updateProfile(user, {
+          displayName: fullNameValue, photoURL: {photoURL}
+        }).then(() => {
+          // Profile updated!
+          // navigate("/browse"); //we are redirecting using on auth state change
+        }).catch((error) => {
+          // An error occurred
+          seterrorMessage(error.message);
+        });
+      })
+      .catch((error) => {
+        
+       seterrorMessage(error.code+" : "+error.message)
+      });
+
+     
+
+    }
+    else{
+      //sign in logic
+    signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    // console.log(user);
+    // navigate("/browse"); //used onAuthStateChanged for redirecting
+   
+  })
+  .catch((error) => {
+    // seterrorMessage(error.code+" : "+ error.message);
+    seterrorMessage(" Oops! User not found..");
+  });
+    }
+
   };
-  
+
   return (
-    <div className="flex">
+    <div className="flex flex-col min-h-screen">
       <Header />
 
-      <div className="absolute">
-        <img
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/aa9edac4-a0e6-4f12-896e-32c518daec62/web/IN-en-20241223-TRIFECTA-perspective_1502c512-be5f-4f14-b21a-e3d75fe159ab_small.jpg"
-          alt="no img found"
-        />
-      </div>
-
       <div
-        className="relative w-3/12 
-     bg-black
-      mx-auto my-72 p-12
-      bg-opacity-80
-      rounded"
-      >
-        <h1 className="px-2 pb-5 text-white font-extrabold text-3xl">
+        className="absolute inset-0 bg-cover bg-center -z-10"
+        style={{
+          backgroundImage:
+            "url('https://assets.nflxext.com/ffe/siteui/vlv3/aa9edac4-a0e6-4f12-896e-32c518daec62/web/IN-en-20241223-TRIFECTA-perspective_1502c512-be5f-4f14-b21a-e3d75fe159ab_small.jpg')",
+        }}
+      ></div>
+
+      <div className="relative w-full max-w-md bg-black mx-auto my-16 p-8 bg-opacity-80 rounded">
+        <h1 className="text-white font-extrabold text-3xl mb-6">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
         <form className="text-white">
           {!isSignInForm && (
-            <div>
-              <input
+            <input
               ref={fullName}
-                type="text"
-                placeholder="Enter Full Name "
-                className="p-2 m-2 rounded w-80 text-black"
-              />
-            </div>
-          )}
-          <div>
-            <input
-            ref={email}
               type="text"
-              placeholder="Enter Email Address"
-              className="p-2 m-2 rounded w-80 text-black"
+              placeholder="Enter Full Name"
+              className="p-3 mb-4 rounded w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
             />
-          </div>
-          <div>
-            <input
+          )}
+          <input
+            ref={email}
+            type="text"
+            placeholder="Enter Email Address"
+            className="p-3 mb-4 rounded w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+          />
+          <input
             ref={password}
-              type="password"
-              placeholder="Enter Password"
-              className="p-2 m-2 rounded w-80 text-black"
-            />
-            <p className="font-bold text-red-900">{errorMessage}</p>
-          </div>
-          <div>
-            <button 
-            className=" p-4 m-2 text-xl bg-red-600 w-80 font-bold rounded" 
-            onClick={handleButtonClick}>
+            type="password"
+            placeholder="Enter Password"
+            className="p-3 mb-4 rounded w-full text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-600"
+          />
+          <p className="font-bold text-red-600 mb-4">{errorMessage}</p>
+          <button
+            className="p-3 mb-4 text-xl bg-red-600 w-full font-bold rounded"
+            onClick={handleButtonClick}
+          >
             {isSignInForm ? "Sign In" : "Sign Up"}
-              
-            </button>
-          </div>
-          <div>
-            <h1 className="px-40 mb-5 font-semibold text-2xl w-80 h-5">or</h1>
-          </div>
-          <div>
-            <button className=" p-4 m-2 text-xl bg-gray-600 bg-opacity-60 w-80 font-bold rounded">
-              Use a sign-in code
-            </button>
-          </div>
-          <div>
-            <button className=" p-4 m-2 text-white text-xl w-80 font-bold rounded">
-              Forget password ?
-            </button>
-          </div>
-          <div>
-            <p
-              className=" p-4 m-2 text-white text-xl w-80 font-bold rounded cursor-pointer"
-              onClick={toggleSignInForm}
-            >
-              {" "}
-              {isSignInForm
-                ? "New to Netflix? Sign Up Now"
-                : "Already have account! Sign In"}
-            </p>
-          </div>
+          </button>
+          <p
+            className="text-white text-xl w-full font-bold text-center cursor-pointer"
+            onClick={toggleSignInForm}
+          >
+            {isSignInForm
+              ? "New to Netflix? Sign Up Now"
+              : "Already have an account? Sign In"}
+          </p>
         </form>
       </div>
     </div>

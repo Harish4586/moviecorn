@@ -1,11 +1,12 @@
-export const checkValidData=(email,password,fullName)=>{
-//using rajex 
-
-const isEmailValid=/^[\w.-]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
-const isPasswordValid=/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password);
-const isFullNameValid = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/.test(fullName);
-if(!isEmailValid) return "Email Id is not Valid";
-if(!isPasswordValid) return "Password is not Valid";
-if(!isFullNameValid) return "Full Name is not Valid";
-return null;
-};
+export const checkValidData = (email, password, fullName = "") => {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return "Please enter a valid email address.";
+    }
+    if (!password || password.length < 6) {
+      return "Password must be at least 6 characters long.";
+    }
+    if (fullName && fullName.trim() === "") {
+      return "Full name cannot be empty.";
+    }
+    return null; // Validation passed
+  };
