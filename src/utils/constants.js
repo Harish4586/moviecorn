@@ -9,7 +9,9 @@ export const Body_bg="https://assets.nflxext.com/ffe/siteui/vlv3/aa9edac4-a0e6-4
 
 
  export const API_url = 'https://api.themoviedb.org/3/movie/now_playing?page=1';
-
+ export const PopularMovie_url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
+export const upcoming_url = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+export const top_rated_url = 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1';
 
  export const options = {
   method: 'GET',
@@ -25,3 +27,4 @@ export const API_KEY = "5d69afa06c011fb4bec92062e4baf0da";
 export const ReadAccessToken="eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ZDY5YWZhMDZjMDExZmI0YmVjOTIwNjJlNGJhZjBkYSIsIm5iZiI6MTczNTU0MDg0NC45MTY5OTk4LCJzdWIiOiI2NzcyNDA2Y2Q4ZGMyMmU2YzY5Mjc0MGEiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.PwJAHRt0nVdh-HSaBmHEimXw5yTexyCs3AzL_qNaOyg"
 
 export const SEARCH_QUERY = "https://api.themoviedb.org/3/search/movie?query=";
+export const  MovieCardImg="https://image.tmdb.org/t/p/w500";
