@@ -1,6 +1,7 @@
 import React from 'react'
 import MovieCard from './MovieCard'
 
+
 const MoviesList = ({title,movies}) => {
     // console.log("form moviesList",title,movies);
 
