@@ -12,7 +12,7 @@ const Browse = () => {
   const toggleGptPage= useSelector(store=>store.gpt.showGptSearchBar);
   return (
     
-    <div>
+    <div className=' md:bg-transparent'>
     <Header/>
     {toggleGptPage?<Gpt/> :  <><MainMovieContainer />
       <MovieContainer/></>}

@@ -64,15 +64,15 @@ const Header = () => {
     dispatch(changeLang(e.target.value))
   };
   return (
-    <div className="absolute w-screen  px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
-      <img src={LOGO} alt="no img found" className=" w-44 "></img>
+    <div className="absolute w-screen  px-8 md:py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
+      <img src={LOGO} alt="no img found" className=" mx-auto md:mx-0 w-44 "></img>
       {/**this is for a option that is availabe only after user is logged in */}
       {user && (
-        <div className="flex p-2">
+        <div className="flex p-2 mt-[1%] md:mt-0 justify-between md:justify-center">
           {/**this is for choosing language */}
           {gptSearchBarValue && (
             <select
-              className=" bg-gray-800 h-12 mr-2 rounded-xl
+              className=" bg-gray-800 h-14 md:h-12 mr-2 rounded-xl
               px-6 text-lg text-white font-semibold"
               onChange={handleLangChange}
             >
@@ -84,7 +84,7 @@ const Header = () => {
             </select>
           )}
           <button
-            className="bg-purple-800 h-12 mr-2 rounded-xl
+            className="bg-purple-800 h-14 md:h-12 mr-2 rounded-xl
      px-6 text-lg text-white font-semibold"
             onClick={handleGptSearchClick}
           >
@@ -93,11 +93,11 @@ const Header = () => {
           <img
             src={UserAvatar}
             alt="userIcon"
-            className="w-12 h-12  rounded-lg"
+            className=" hidden md:block w-12 md:h-12 rounded-lg"
           />
           <button
             onClick={handleSignOut}
-            className="bg-red-600 h-12 ml-2 rounded-xl px-2 text-lg text-white font-semibold"
+            className="bg-red-600 h-14 md:h-12 ml-2 rounded-xl px-5   md:px-2 text-lg text-white font-semibold"
           >
             sign out
           </button>

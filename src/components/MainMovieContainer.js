@@ -6,14 +6,14 @@ import MainMovieVideo from './MainMovieVideo';
 const MainMovieContainer = () => {
     const movies= useSelector(store=>store.movies?.NowPlayingMovies);
     if(movies===null) return; //early return if movies are not present when loaded initially
-    const mainMovie= movies[0];
+    const mainMovie= movies[6];
     // console.log("from main movie",mainMovie);
     //we'll need two things
      //1. videoTitle
      //2. videoBackground
      const {original_title,overview,id}=mainMovie;
   return (
-    <div>
+    <div className='pt-[30%] md:pt-0 bg-black '>
       <MainMovietitle title={original_title} overview={overview} />
       <MainMovieVideo  movieId={id} />
     </div>
